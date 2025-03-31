@@ -1,9 +1,9 @@
 import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
-import { CpuUsageService } from './cpu-usage.service';
+import { CloudWatchService } from '../cloudwatch/cloudwatch.service';
 
 @Controller('cpu-usage')
 export class CpuUsageController {
-  constructor(private readonly cpuUsageService: CpuUsageService) { }
+  constructor(private readonly cloudWatchService: CloudWatchService) { }
 
   @Get()
   async getCpuUsage(
@@ -11,6 +11,6 @@ export class CpuUsageController {
     @Query('timePeriod', ParseIntPipe) timePeriod: number,
     @Query('interval', ParseIntPipe) interval: number,
   ) {
-    return this.cpuUsageService.getCpuUsage({ ipAddress, timePeriod, interval });
+    return await this.cloudWatchService.getMetricData(ipAddress, 'CPUUtilization', timePeriod, interval)
   }
 }
