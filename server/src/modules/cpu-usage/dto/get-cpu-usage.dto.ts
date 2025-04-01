@@ -1,15 +1,15 @@
-import { IsIP, IsNotEmpty, IsNumber } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsIP, IsPositive } from 'class-validator';
 
 export class GetCpuUsageDto {
   @IsIP()
-  @IsNotEmpty()
   ipAddress: string
 
-  @IsNumber()
-  @IsNotEmpty()
+  @Type(() => Number)
+  @IsPositive()
   timePeriod: number
 
-  @IsNumber()
-  @IsNotEmpty()
+  @Type(() => Number)
+  @IsPositive()
   interval: number
 }

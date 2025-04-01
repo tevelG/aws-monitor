@@ -1,25 +1,27 @@
-import { CloudWatchClient, GetMetricDataCommand } from '@aws-sdk/client-cloudwatch';
+import { CloudWatchClient, GetMetricDataCommand, GetMetricDataInput, MetricDataResult } from '@aws-sdk/client-cloudwatch';
 import { DescribeInstancesCommand, EC2Client } from '@aws-sdk/client-ec2';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { MILLISECONDS_PER_SECOND, SECONDS_PER_MINUTE } from 'src/common/constants';
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 @Injectable()
 export class CloudWatchService {
     private cloudWatch: CloudWatchClient
     private ec2Client: EC2Client
 
-    constructor(private configService: ConfigService) {
-        const awsConfig = {
-            region: this.configService.get('aws.region'),
-            credentials: {
-                accessKeyId: this.configService.get('aws.accessKeyId'),
-                secretAccessKey: this.configService.get('aws.secretAccessKey'),
-            },
+    static readonly awsConfig = {
+        region: process.env.AWS_REGION,
+        credentials: {
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
         }
+    }
 
-        this.cloudWatch = new CloudWatchClient(awsConfig)
-        this.ec2Client = new EC2Client(awsConfig)
+    constructor() {
+        this.cloudWatch = new CloudWatchClient(CloudWatchService.awsConfig)
+        this.ec2Client = new EC2Client(CloudWatchService.awsConfig)
     }
 
     async getInstanceIdByIp(ipAddress: string): Promise<string> {
@@ -28,10 +30,14 @@ export class CloudWatchService {
         })
 
         const response = await this.ec2Client.send(command)
-        const instances = response.Reservations?.flatMap((r) => r.Instances) || []
+        const instances = response.Reservations?.flatMap((reservation) => reservation.Instances) || []
 
         if (!instances.length) {
             throw new NotFoundException(`No instance found for IP: ${ipAddress}`)
+        }
+
+        if (instances.length > 1) {
+            throw new Error(`Multiple instances found for IP: ${ipAddress}`);
         }
 
         if (!instances[0].InstanceId) {
@@ -41,10 +47,10 @@ export class CloudWatchService {
         return instances[0].InstanceId
     }
 
-    async getMetricData(ipAddress: string, metricName: string, timePeriod: number, interval: number) {
+    async getMetricData(ipAddress: string, metricName: string, timePeriod: number, interval: number): Promise<MetricDataResult[]> {
         const instanceId = await this.getInstanceIdByIp(ipAddress)
 
-        const params = {
+        const params: GetMetricDataInput = {
             MetricDataQueries: [
                 {
                     Id: 'metricData',
@@ -65,12 +71,20 @@ export class CloudWatchService {
         }
 
         const command = new GetMetricDataCommand(params)
-        const { MetricDataResults } = await this.cloudWatch.send(command)
+        try {
+            const response = await this.cloudWatch.send(command)
 
-        if (!MetricDataResults.length) {
-            throw new NotFoundException(`No metric data found for instance: ${instanceId}`)
+            if (!response || !response.MetricDataResults) {
+                throw new Error(`Unexpected response from CloudWatch: ${JSON.stringify(response)}`);
+            }
+
+            if (!response.MetricDataResults.length) {
+                throw new NotFoundException(`No metric data found for instance: ${instanceId}`);
+            }
+
+            return response.MetricDataResults;
+        } catch (error) {
+            throw new Error(`Error fetching CloudWatch data: ${error.message}`);
         }
-
-        return MetricDataResults
     }
 }
