@@ -1,5 +1,9 @@
 import { Type } from 'class-transformer';
-import { IsIP, IsPositive } from 'class-validator';
+import { IsIP, IsPositive, Validate } from 'class-validator';
+
+function IsMultipleOf60(value: number) {
+  return value % 60 === 0
+}
 
 export class GetCpuUsageDto {
   @IsIP()
@@ -10,6 +14,7 @@ export class GetCpuUsageDto {
   timePeriod: number
 
   @Type(() => Number)
+  @Validate(IsMultipleOf60, { message: 'Interval must be a multiple of 60' })
   @IsPositive()
   interval: number
 }
