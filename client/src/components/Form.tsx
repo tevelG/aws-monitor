@@ -14,18 +14,24 @@ interface IForm {
     setFetchParams: React.Dispatch<React.SetStateAction<FetchParams | null>>
 }
 
+const ipAddressRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+
 const schema = yup.object({
-    ipAddress: yup.string().required("IP Address is required"),
+    ipAddress: yup
+        .string()
+        .required("IP Address is required")
+        .matches(ipAddressRegex, "Invalid IP address format"),
     timePeriod: yup
         .number()
+        .required("Time period is required")
         .typeError("Time period must be a number")
-        .positive("Time period must be greater than zero")
-        .required("Time period is required"),
+        .positive("Time period must be greater than zero"),
     interval: yup
         .number()
+        .required("Interval is required")
         .typeError("Interval must be a number")
         .positive("Interval must be greater than zero")
-        .required("Interval is required"),
+        .test("is-multiple-of-60", "Interval must be a multiple of 60", (value) => value === undefined ? true : value % 60 === 0),
 });
 
 const Form = ({ setFetchParams }: IForm) => {

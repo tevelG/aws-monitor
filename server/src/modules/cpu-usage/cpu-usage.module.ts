@@ -4,8 +4,7 @@ import { CpuUsageController } from './cpu-usage.controller';
 
 @Module({
     imports: [CloudWatchModule],
-    controllers: [CpuUsageController],
-    providers: [],
+    controllers: [CpuUsageController]
 })
 
 export class CpuUsageModule { }
