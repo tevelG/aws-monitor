@@ -45,13 +45,13 @@ const Form = ({ setFetchParams }: IForm) => {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} className="form">
 
             <Input type="timePeriod" label="Time Period:" register={register} errors={errors} />
             <Input type="interval" label="Interval:" register={register} errors={errors} />
             <Input type="ipAddress" label="IP Address:" register={register} errors={errors} />
 
-            <button type="submit">Load</button>
+            <button type="submit" className="form__button">Load</button>
         </form>
     );
 };

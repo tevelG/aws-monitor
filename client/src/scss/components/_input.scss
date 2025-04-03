@@ -1,0 +1,33 @@
+.input-container {
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+
+    &__label {
+        font-size: $font-size-XS;
+    }
+
+    &__input, &__select {
+        height: 3rem;
+        width: 15rem;
+
+        padding: 0.5rem;
+        border: 1px solid $color-border-gray;
+        border-radius: $border-radius;
+
+        &:focus {
+            outline: none;
+            border-color: $color-border-blue;
+
+            transition: border-color 0.2s;
+        }
+    }
+
+    &__error {
+        color: $color-error;
+
+        position: absolute;
+        top: 100%;
+    }
+}

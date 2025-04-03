@@ -47,7 +47,7 @@ export class CloudWatchService {
         return instances[0].InstanceId
     }
 
-    async getMetricData(ipAddress: string, metricName: string, timePeriod: number, interval: number): Promise<MetricDataResult[]> {
+    async getMetricData(ipAddress: string, metricName: string, timePeriod: number, interval: number): Promise<MetricDataResult> {
         const instanceId = await this.getInstanceIdByIp(ipAddress)
 
         const params: GetMetricDataInput = {
@@ -82,7 +82,7 @@ export class CloudWatchService {
                 throw new NotFoundException(`No metric data found for instance: ${instanceId}`);
             }
 
-            return response.MetricDataResults;
+            return response.MetricDataResults[0];
         } catch (error) {
             throw new Error(`Error fetching CloudWatch data: ${error.message}`);
         }

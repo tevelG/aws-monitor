@@ -21,13 +21,29 @@ const CpuUsageChart = ({ data }: { data: CpuData }) => {
         labels: timestamps,
         datasets: [
             {
-                label: 'CPU Usage (%)',
+                label: 'CPU Usage Over Time',
                 data: values,
+                borderColor: "rgb(11, 127, 148)",
+                backgroundColor: "rgb(11, 127, 148)",
+                pointRadius: 3,
             }
         ]
     }
 
-    return <Line data={chartData} />
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                ticks: { color: "$color-black", font: { size: 11 } },
+            },
+            y: {
+                ticks: { color: "$color-black", font: { size: 11 } },
+            },
+        }
+    };
+
+    return <Line data={chartData} options={options} />
 }
 
 export default CpuUsageChart
