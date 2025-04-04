@@ -33,9 +33,11 @@ const CpuUsageChart = ({ data }: ICpuUsageChart) => {
     const options = {
         responsive: true,
         maintainAspectRatio: false,
+        layout: { padding: { right: 30 } },
         scales: {
             x: {
-                ticks: { font: { size: 11 }, maxTicksLimit: 20 }
+                ticks: { font: { size: 11 }, maxTicksLimit: 20 },
+                reverse: true
             },
             y: {
                 beginAtZero: true,

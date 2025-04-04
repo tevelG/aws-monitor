@@ -14,5 +14,9 @@
         justify-content: center;
 
         height: 100%;
+
+        &__error {
+            font-size: $font-size-S;
+        }
     }
 }

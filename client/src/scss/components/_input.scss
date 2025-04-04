@@ -5,7 +5,7 @@
     position: relative;
 
     &__label {
-        font-size: $font-size-XS;
+        font-size: $font-size-S;
     }
 
     &__input, &__select {
@@ -26,6 +26,7 @@
 
     &__error {
         color: $color-error;
+        font-size: $font-size-XS;
 
         position: absolute;
         top: 100%;

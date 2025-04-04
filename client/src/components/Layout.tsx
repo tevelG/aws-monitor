@@ -27,7 +27,9 @@ const Layout = () => {
             <Form onSubmit={(values: IInputValues) => setInputValues(values)} />
             <main className="layout__main">
                 {isLoading && <OrbitProgress size="medium" color="rgb(11, 58, 129)" />}
-                {error && <p>Error: {error instanceof AxiosError ? error.response?.data?.message : error.message}</p>}
+                {error && <p className="layout__main__error">
+                    Error: {error instanceof AxiosError ? error.response?.data?.message : error.message}
+                </p>}
                 {data && <CpuUsageChart data={data} />}
             </main>
         </div>
