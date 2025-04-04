@@ -1,8 +1,15 @@
 import { Type } from 'class-transformer';
-import { IsIP, IsPositive, Validate } from 'class-validator';
+import { IsIP, IsPositive, Validate, ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments } from 'class-validator';
 
-const IsMultipleOf60 = (value: number) => {
-  return value % 60 === 0
+@ValidatorConstraint({ name: 'isMultipleOf60', async: false })
+export class IsMultipleOf60Constraint implements ValidatorConstraintInterface {
+  validate(value: number): boolean {
+    return value % 60 === 0
+  }
+
+  defaultMessage(args: ValidationArguments) {
+    return `${args.property} must be a multiple of 60`
+  }
 }
 
 export class GetCpuUsageDto {
@@ -14,7 +21,7 @@ export class GetCpuUsageDto {
   timePeriod: number
 
   @Type(() => Number)
-  @Validate(IsMultipleOf60, { message: 'Interval must be a multiple of 60' })
   @IsPositive()
+  @Validate(IsMultipleOf60Constraint)
   interval: number
 }

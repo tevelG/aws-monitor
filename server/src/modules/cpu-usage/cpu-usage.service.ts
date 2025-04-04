@@ -3,6 +3,7 @@ import { DescribeInstancesCommand, EC2Client } from '@aws-sdk/client-ec2';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MILLISECONDS_PER_SECOND, SECONDS_PER_MINUTE } from 'src/common/constants';
+import { GetCpuUsageDto } from './dto/get-cpu-usage.dto';
 
 @Injectable()
 export class CpuUsageService {
@@ -53,7 +54,7 @@ export class CpuUsageService {
         }
     }
 
-    async getMetricData(ipAddress: string, timePeriod: number, interval: number): Promise<MetricDataResult> {
+    async getMetricData({ ipAddress, timePeriod, interval }: GetCpuUsageDto): Promise<MetricDataResult> {
         const instanceId = await this.getInstanceIdByIp(ipAddress)
 
         const params: GetMetricDataInput = {

@@ -7,7 +7,7 @@ export class CpuUsageController {
   constructor(private readonly cpuUsageService: CpuUsageService) { }
 
   @Post()
-  async getCpuUsage(@Body() { ipAddress, timePeriod, interval }: GetCpuUsageDto) {
-    return await this.cpuUsageService.getMetricData(ipAddress, timePeriod, interval)
+  async getCpuUsage(@Body() getCpuUsageDto: GetCpuUsageDto) {
+    return await this.cpuUsageService.getMetricData(getCpuUsageDto)
   }
 }
