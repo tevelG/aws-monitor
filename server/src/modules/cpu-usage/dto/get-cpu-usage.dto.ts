@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsIP, IsPositive, Validate } from 'class-validator';
 
-function IsMultipleOf60(value: number) {
+const IsMultipleOf60 = (value: number) => {
   return value % 60 === 0
 }
 

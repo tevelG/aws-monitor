@@ -11,7 +11,7 @@ interface CpuData {
 
 const formatDateTime = (timestamp: string) => {
     return format(parseISO(timestamp), "dd/MM HH:mm")
-};
+}
 
 const CpuUsageChart = ({ data }: { data: CpuData }) => {
     const timestamps = data.Timestamps.map((timestamp: string) => formatDateTime(timestamp))

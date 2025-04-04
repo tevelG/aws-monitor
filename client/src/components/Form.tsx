@@ -31,13 +31,13 @@ const schema = yup.object({
         .typeError("Interval must be a number")
         .positive("Interval must be greater than zero")
         .test("is-multiple-of-60", "Interval must be a multiple of 60", (value) => value === undefined ? true : value % 60 === 0),
-});
+})
 
 const Form = ({ onSubmit }: IForm) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<IInputValues>({
         resolver: yupResolver(schema)
-    });
+    })
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="form">
@@ -48,7 +48,7 @@ const Form = ({ onSubmit }: IForm) => {
 
             <button type="submit" className="form__button">Load</button>
         </form>
-    );
-};
+    )
+}
 
-export default Form;
+export default Form

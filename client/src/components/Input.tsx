@@ -20,15 +20,18 @@ const Input = ({ type, label, register, errors }: IInput) => {
     return (
         <div className="input-container">
             <label className="input-container__label">{label}</label>
+
             {type === 'timePeriod'
-                ? <select {...register(type)} defaultValue={60} className="input-container__select">
-                    {timeOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                            {option.label}
-                        </option>
-                    ))}
-                </select>
-                : <input {...register(type)} className="input-container__input" />}
+                ? (
+                    <select {...register(type)} defaultValue={60} className="input-container__select">
+                        {timeOptions.map((option) => (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
+                        ))}
+                    </select>
+                ) : <input {...register(type)} className="input-container__input" />}
+                
             {errors[type] && <p className="input-container__error">{errors[type].message}</p>}
         </div>
     )

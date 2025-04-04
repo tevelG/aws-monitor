@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { CloudWatchModule } from '../cloudwatch/cloudwatch.module';
 import { CpuUsageController } from './cpu-usage.controller';
+import { CpuUsageService } from './cpu-usage.service';
 
 @Module({
-    imports: [CloudWatchModule],
-    controllers: [CpuUsageController]
+    controllers: [CpuUsageController],
+    providers: [CpuUsageService]
 })
 
 export class CpuUsageModule { }
