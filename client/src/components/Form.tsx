@@ -2,12 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import Input from "./Input";
-
-export interface IInputValues {
-    ipAddress: string
-    timePeriod: number
-    interval: number
-}
+import { IInputValues } from "./Layout";
 
 interface IForm {
     onSubmit: (values: IInputValues) => void
@@ -15,7 +10,7 @@ interface IForm {
 
 const ipAddressRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
 
-const schema = yup.object({
+const schema: yup.ObjectSchema<IInputValues> = yup.object({
     ipAddress: yup
         .string()
         .required("IP Address is required")
@@ -27,10 +22,17 @@ const schema = yup.object({
         .positive("Time period must be greater than zero"),
     interval: yup
         .number()
-        .required("Interval is required")
+        .transform((value, originalValue) =>
+            originalValue === "" ? undefined : value
+        )
         .typeError("Interval must be a number")
+        .required("Interval is required")
         .positive("Interval must be greater than zero")
-        .test("is-multiple-of-60", "Interval must be a multiple of 60", (value) => value === undefined ? true : value % 60 === 0),
+        .test(
+            "is-multiple-of-60",
+            "Interval must be a multiple of 60",
+            (value) => value === undefined || value % 60 === 0
+        ),
 })
 
 const Form = ({ onSubmit }: IForm) => {

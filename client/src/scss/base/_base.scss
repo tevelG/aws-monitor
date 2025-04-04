@@ -4,29 +4,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: $font-primary, monospace, sans-serif;
-}
-
-:root {
-    line-height: 1.5;
-    font-weight: 400;
-  
-    color: rgba(0, 0, 0, 0.88);
-    background-color: #ffffff;
-}
-  
-a {
-    text-decoration: none;
-
-    &:hover,
-    &:focus,
-    &:active,
-    &:visited {
-        text-decoration: none;
-    }
+    font-family: $font-primary;
 }
 
 html {
-    font-family: $font-primary;
-    font-size: 62.5%; // 1rem = 10px
+    font-size: 62.5%;
+    color: $color-text;
+    line-height: 1.5;
 }

@@ -1,12 +1,10 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form"
-import { IInputValues } from "./Form"
+import { IInputValues } from "./Layout";
 
-const timeOptions = [
-    { label: "Last Hour", value: 60 },
-    { label: "Last Day", value: 1440 },
-    { label: "Last Week", value: 10080 },
-    { label: "Last Month", value: 40320 },
-];
+interface ITimeOption {
+    label: string
+    value: number
+}
 
 interface IInput {
     type: keyof IInputValues
@@ -14,6 +12,13 @@ interface IInput {
     register: UseFormRegister<IInputValues>
     errors: FieldErrors<IInputValues>
 }
+
+const timeOptions: ITimeOption[] = [
+    { label: "Last Hour", value: 60 },
+    { label: "Last Day", value: 1440 },
+    { label: "Last Week", value: 10080 },
+    { label: "Last Month", value: 40320 },
+]
 
 const Input = ({ type, label, register, errors }: IInput) => {
 
@@ -31,7 +36,7 @@ const Input = ({ type, label, register, errors }: IInput) => {
                         ))}
                     </select>
                 ) : <input {...register(type)} className="input-container__input" />}
-                
+
             {errors[type] && <p className="input-container__error">{errors[type].message}</p>}
         </div>
     )
