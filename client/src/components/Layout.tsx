@@ -1,7 +1,7 @@
 import { useState } from "react"
 import useGetCpuUsage from "../hooks/useGetCpuUsage"
 import CpuUsageChart from "./CpuUsageChart"
-import Form from "./Form"
+import Form, { IInputValues } from "./Form"
 import Header from "./Header"
 import { OrbitProgress } from "react-loading-indicators"
 
@@ -19,7 +19,7 @@ const Layout = () => {
     return (
         <div className="layout">
             <Header />
-            <Form setFetchParams={setFetchParams} />
+            <Form onSubmit={(values: IInputValues) => setFetchParams(values)} />
             <main className="layout__main">
                 {isLoading && <OrbitProgress size="medium" color="rgb(11, 58, 129)" />}
                 {error && <p>Error: {error.message}</p>}

@@ -2,7 +2,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import Input from "./Input";
-import { FetchParams } from "./Layout";
 
 export interface IInputValues {
     ipAddress: string
@@ -11,7 +10,7 @@ export interface IInputValues {
 }
 
 interface IForm {
-    setFetchParams: React.Dispatch<React.SetStateAction<FetchParams | null>>
+    onSubmit: (values: IInputValues) => void
 }
 
 const ipAddressRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
@@ -34,15 +33,11 @@ const schema = yup.object({
         .test("is-multiple-of-60", "Interval must be a multiple of 60", (value) => value === undefined ? true : value % 60 === 0),
 });
 
-const Form = ({ setFetchParams }: IForm) => {
+const Form = ({ onSubmit }: IForm) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<IInputValues>({
         resolver: yupResolver(schema)
     });
-
-    const onSubmit = (values: IInputValues) => {
-        setFetchParams(values)
-    };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="form">

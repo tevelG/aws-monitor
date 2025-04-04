@@ -10,22 +10,22 @@ interface CpuData {
 }
 
 const formatDateTime = (timestamp: string) => {
-    return format(parseISO(timestamp), "dd/MM HH:mm");
+    return format(parseISO(timestamp), "dd/MM HH:mm")
 };
 
 const CpuUsageChart = ({ data }: { data: CpuData }) => {
     const timestamps = data.Timestamps.map((timestamp: string) => formatDateTime(timestamp))
-    const values = data.Values
+    const values = data.Values.map(value => value * 100)
 
     const chartData = {
         labels: timestamps,
         datasets: [
             {
-                label: 'CPU Usage Over Time',
+                label: 'CPU Usage Over Time (%)',
                 data: values,
                 borderColor: "rgb(11, 127, 148)",
                 backgroundColor: "rgb(11, 127, 148)",
-                pointRadius: 3,
+                pointRadius: 3
             }
         ]
     }
@@ -35,13 +35,14 @@ const CpuUsageChart = ({ data }: { data: CpuData }) => {
         maintainAspectRatio: false,
         scales: {
             x: {
-                ticks: { color: "$color-black", font: { size: 11 } },
+                ticks: { font: { size: 11 }, maxTicksLimit: 20 }
             },
             y: {
-                ticks: { color: "$color-black", font: { size: 11 } },
-            },
+                beginAtZero: true,
+                ticks: { font: { size: 11 } }
+            }
         }
-    };
+    }
 
     return <Line data={chartData} options={options} />
 }
